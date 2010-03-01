@@ -54,5 +54,7 @@
 		.bind('load', {container:container}, onImageLoad)
 		.attr(attr)
 		.appendTo(this);
+
+		return this;
 	};
 })(jQuery);
