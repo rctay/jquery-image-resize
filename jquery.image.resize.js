@@ -47,10 +47,13 @@
 				valign_middle(container, e);
 			}
 		}
+
+		e.show();
 	};
 
 	$.fn.load_image = function(container, attr) {
 		$(new Image())
+		.hide()
 		.bind('load', {container:container}, onImageLoad)
 		.attr(attr)
 		.appendTo(this);
