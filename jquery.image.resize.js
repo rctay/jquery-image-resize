@@ -25,28 +25,32 @@
 	};
 
 	var onImageLoad = function(event) {
-		var e = $(this);
-		var container = event.data.container;
+		$(this)
+		.scale_image_to(event.data.container);
+	};
 
+	$.fn.scale_image_to = function(container) {
 		// assume all containers are thin
 
 		// is fat?
-		if (e.attr("width") > e.attr("height")) {
-			scale_by_width(container, e);
+		if (this.attr("width") > this.attr("height")) {
+			scale_by_width(container, this);
 
-			if (e.attr("height") > container.height()) {
-				scale_by_height(container, e);
+			if (this.attr("height") > container.height()) {
+				scale_by_height(container, this);
 			} else {
-				valign_middle(container, e);
+				valign_middle(container, this);
 			}
 		} else {
-			scale_by_height(container, e);
+			scale_by_height(container, this);
 
-			if (e.attr("width") > container.width()) {
-				scale_by_width(container, e);
-				valign_middle(container, e);
+			if (this.attr("width") > container.width()) {
+				scale_by_width(container, this);
+				valign_middle(container, this);
 			}
 		}
+
+		return this;
 	};
 
 	$.fn.load_image = function(container, attr) {
