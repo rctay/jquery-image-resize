@@ -78,7 +78,7 @@
 	 * :param dimensions: Optional; see the *dimensions* argument to
 	 *   .scale_image_to().
 	 *
-	 * :returns: The selected element.
+	 * :returns: The instance of Image created (NOT the selected element).
 	 */
 	$.fn.load_image = function(attr, dimensions) {
 		// dimensions is optional; defaults to selected element.
@@ -86,12 +86,10 @@
 			dimensions = this;
 		}
 
-		$(new Image())
+		return $(new Image())
 		.hide()
 		.bind('load', {dimensions: dimensions}, onImageLoad)
 		.attr(attr)
 		.appendTo(this);
-
-		return this;
 	};
 })(jQuery);
