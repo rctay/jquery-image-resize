@@ -3,15 +3,15 @@
  **/
 
 (function($) {
-	var scale_by_width = function(parent, child) {
-		var h = child.attr("height") * (parent.width() / child.attr("width"));
-		child.attr("width", parent.width());
+	var scale_by_width = function(d, child) {
+		var h = child.attr("height") * (d.width / child.attr("width"));
+		child.attr("width", d.width);
 		child.attr("height", h);
 	};
 
-	var scale_by_height = function(parent, child) {
-		var w = child.attr("width") * (parent.height() / child.attr("height"));
-		child.attr("height", parent.height());
+	var scale_by_height = function(d, child) {
+		var w = child.attr("width") * (d.height / child.attr("height"));
+		child.attr("height", d.height);
 		child.attr("width", w);
 	};
 
@@ -19,42 +19,54 @@
 	 * horizontally, text-align takes care of centralising for us.
 	 * vertically, not so.
 	 */
-	var valign_middle = function(parent, child) {
-		var d = parent.height() - child.attr("height");
-		child.css("margin-top", d==0 ? 0 : d/2);
+	var valign_middle = function(d, child) {
+		var delta = d.height - child.attr("height");
+		child.css("margin-top", delta==0 ? 0 : delta/2);
 	};
 
 	var onImageLoad = function(event) {
-		var e = $(this);
-		var container = event.data.container;
+		$(this)
+		.scale_image_to(event.data.dimensions)
+		.show();
+	};
 
-		// assume all containers are thin
+	$.fn.scale_image_to = function(dimensions) {
+		// build dimensions dictionary.
+		var d = {
+			width: dimensions.width instanceof Function ? dimensions.width() : dimensions.width,
+			height: dimensions.height instanceof Function ? dimensions.height() : dimensions.height
+		};
 
 		// is fat?
-		if (e.attr("width") > e.attr("height")) {
-			scale_by_width(container, e);
+		if (this.attr("width") > this.attr("height")) {
+			scale_by_width(d, this);
 
-			if (e.attr("height") > container.height()) {
-				scale_by_height(container, e);
+			if (this.attr("height") > d.height) {
+				scale_by_height(d, this);
 			} else {
-				valign_middle(container, e);
+				valign_middle(d, this);
 			}
 		} else {
-			scale_by_height(container, e);
+			scale_by_height(d, this);
 
-			if (e.attr("width") > container.width()) {
-				scale_by_width(container, e);
-				valign_middle(container, e);
+			if (this.attr("width") > d.width) {
+				scale_by_width(d, this);
+				valign_middle(d, this);
 			}
 		}
 
-		e.show();
+		return this;
 	};
 
-	$.fn.load_image = function(container, attr) {
+	$.fn.load_image = function(attr, dimensions) {
+		// dimensions is optional; defaults to selected element.
+		if (dimensions == null) {
+			dimensions = this;
+		}
+
 		$(new Image())
 		.hide()
-		.bind('load', {container:container}, onImageLoad)
+		.bind('load', {dimensions: dimensions}, onImageLoad)
 		.attr(attr)
 		.appendTo(this);
 
