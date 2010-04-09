@@ -29,7 +29,13 @@
 		.scale_image_to(event.data.dimensions);
 	};
 
-	$.fn.scale_image_to = function(d) {
+	$.fn.scale_image_to = function(dimensions) {
+		// build dimensions dictionary.
+		var d = {
+			width: dimensions.width instanceof Function ? dimensions.width() : dimensions.width,
+			height: dimensions.height instanceof Function ? dimensions.height() : dimensions.height
+		};
+
 		// is fat?
 		if (this.attr("width") > this.attr("height")) {
 			scale_by_width(d, this);
@@ -57,14 +63,8 @@
 			dimensions = this;
 		}
 
-		// build dimensions dictionary.
-		var d = {
-			width: dimensions.width instanceof Function ? dimensions.width() : dimensions.width,
-			height: dimensions.height instanceof Function ? dimensions.height() : dimensions.height
-		};
-
 		$(new Image())
-		.bind('load', {dimensions: d}, onImageLoad)
+		.bind('load', {dimensions: dimensions}, onImageLoad)
 		.attr(attr)
 		.appendTo(this);
 
