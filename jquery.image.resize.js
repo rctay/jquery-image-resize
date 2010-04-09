@@ -30,6 +30,16 @@
 		.show();
 	};
 
+	/**
+	 * Resizes the selected element with the ``'width'`` and ``'height'``
+	 * attributes with the specified dimensions.
+	 *
+	 * :param dimensions: An object containing ``'width'`` and ``'height'``
+	 *   properties; if they're functions, they will be invoked with no
+	 *   arguments, and their return values, used.
+	 *
+	 * :returns: The selected element.
+	 */
 	$.fn.scale_image_to = function(dimensions) {
 		// build dimensions dictionary.
 		var d = {
@@ -58,6 +68,18 @@
 		return this;
 	};
 
+	/**
+	 * Loads an image into the selected element, resizing it with
+	 * .scale_image_to() on completion.
+	 *
+	 * :param attr: An object that will be passed to .attr(); minimally, this
+	 *   must contain a ``'src'`` entry, or the image will fail to load.
+	 *
+	 * :param dimensions: Optional; see the *dimensions* argument to
+	 *   .scale_image_to().
+	 *
+	 * :returns: The selected element.
+	 */
 	$.fn.load_image = function(attr, dimensions) {
 		// dimensions is optional; defaults to selected element.
 		if (dimensions == null) {
