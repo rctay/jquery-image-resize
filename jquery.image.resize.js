@@ -26,8 +26,9 @@
 
 	var onImageLoad = function(event) {
 		$(this)
+		.trigger('image_loaded')
 		.scale_image_to(event.data.dimensions)
-		.show();
+		.trigger('image_loaded_scaled');
 	};
 
 	/**
@@ -72,24 +73,47 @@
 	 * Loads an image into the selected element, resizing it with
 	 * .scale_image_to() on completion.
 	 *
+	 * The following events are triggered on the image upon completion of
+	 * loading:
+	 *
+	 *  - ``'image_loaded'``
+	 *  - ``'image_loaded_scaled'``
+	 *
+	 * Unless *should_not_hide* is specified, by default a closure to show
+	 * the image will be bound to the ``'image_loaded_scaled'`` event.
+	 *
 	 * :param attr: An object that will be passed to .attr(); minimally, this
 	 *   must contain a ``'src'`` entry, or the image will fail to load.
 	 *
 	 * :param dimensions: Optional; see the *dimensions* argument to
 	 *   .scale_image_to().
 	 *
+	 * :param should_not_hide: Optional; if true, the image will be hidden
+	 *   before loading, and shown on loading completion.
+	 *
 	 * :returns: The instance of Image created (NOT the selected element).
 	 */
-	$.fn.load_image = function(attr, dimensions) {
+	$.fn.load_image = function(attr, dimensions, should_not_hide) {
 		// dimensions is optional; defaults to selected element.
 		if (dimensions == null) {
 			dimensions = this;
 		}
 
-		return $(new Image())
-		.hide()
+		var i = $(new Image())
 		.bind('load', {dimensions: dimensions}, onImageLoad)
-		.attr(attr)
 		.appendTo(this);
+
+		// by default, hide image before it is loaded.
+		if (!!should_not_hide) {
+			i
+			.hide()
+			.bind('image_loaded_scaled', function() {
+				$(this).show();
+			});
+		}
+
+		i.attr(attr);
+
+		return i;
 	};
 })(jQuery);
