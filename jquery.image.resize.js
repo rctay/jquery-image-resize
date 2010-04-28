@@ -104,7 +104,7 @@
 		.appendTo(this);
 
 		// by default, hide image before it is loaded.
-		if (!!should_not_hide) {
+		if (!should_not_hide) {
 			i
 			.hide()
 			.bind('image_loaded_scaled', function() {
