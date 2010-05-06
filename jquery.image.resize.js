@@ -39,7 +39,7 @@
 	 *   properties; if they're functions, they will be invoked with no
 	 *   arguments, and their return values, used.
 	 *
-	 * :returns: The selected element.
+	 * :returns: The selected element(s).
 	 */
 	$.fn.scale_image_to = function(dimensions) {
 		// get dimensions
