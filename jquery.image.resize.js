@@ -28,7 +28,8 @@
 		$(this)
 		.trigger('image_loaded')
 		.scale_image_to(event.data.dimensions)
-		.trigger('image_loaded_scaled');
+		.trigger('image_loaded_scaled')
+		.unbind(event);
 	};
 
 	/**
@@ -115,8 +116,8 @@
 			if (!should_not_hide) {
 				i
 				.hide()
-				.bind('image_loaded_scaled', function() {
-					$(this).show();
+				.bind('image_loaded_scaled', function(event) {
+					$(this).show().unbind(event);
 				});
 			}
 
