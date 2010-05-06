@@ -87,8 +87,8 @@
 	 * :param attr: An object that will be passed to .attr(); minimally, this
 	 *   must contain a ``'src'`` entry, or the image will fail to load.
 	 *
-	 * :param dimensions: Optional; see the *dimensions* argument to
-	 *   .scale_image_to().
+	 * :param dimensions: Optional; defaults to the selected element. See
+	 *   the *dimensions* argument to .scale_image_to().
 	 *
 	 * :param should_not_hide: Optional; if true, the image will be hidden
 	 *   before loading, and shown on loading completion.
