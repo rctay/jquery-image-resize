@@ -101,8 +101,8 @@
 	 * Unless *should_not_hide* is specified, by default a closure to show
 	 * the image will be bound to the ``'image_loaded_scaled'`` event.
 	 *
-	 * :param dimensions: Optional; defaults to the selected element. See
-	 *   the *dimensions* argument to .resize_image().
+	 * :param dimensions: Optional; defaults to the selected element(s)'
+	 *   parent. See the *dimensions* argument to .resize_image().
 	 *
 	 * :param should_not_hide: Optional; if true, the image will be hidden
 	 *   before loading, and shown on loading completion.
