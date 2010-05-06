@@ -32,6 +32,21 @@
 		.unbind(event);
 	};
 
+	var attach_load_handlers = function(e, dimensions, should_not_hide) {
+		e.bind('load', {dimensions: dimensions}, onImageLoad);
+
+
+		// by default, hide image before it is loaded.
+		if (!should_not_hide) {
+			e
+			.hide()
+			.bind('image_loaded_scaled', function(event) {
+				$(this).show().unbind(event);
+			});
+		}
+
+	};
+
 	/**
 	 * Resizes the selected element with the ``'width'`` and ``'height'``
 	 * attributes with the specified dimensions.
@@ -67,6 +82,43 @@
 					valign_middle(h, e);
 				}
 			}
+		});
+
+		return this;
+	};
+
+	/**
+	 * Resizes an image with .scale_image_to() on completion of loading.
+	 *
+	 * The following events are triggered on the image upon completion of
+	 * loading:
+	 *
+	 *  - ``'image_loaded'``
+	 *  - ``'image_loaded_scaled'``
+	 *
+	 * Unless *should_not_hide* is specified, by default a closure to show
+	 * the image will be bound to the ``'image_loaded_scaled'`` event.
+	 *
+	 * :param dimensions: Optional; defaults to the selected element. See
+	 *   the *dimensions* argument to .scale_image_to().
+	 *
+	 * :param should_not_hide: Optional; if true, the image will be hidden
+	 *   before loading, and shown on loading completion.
+	 *
+	 * :returns: The selected element(s).
+	 */
+	$.fn.scale_image_on_load = function(dimensions, should_not_hide) {
+		var p = this.parent();
+
+		this.each(function() {
+			var e = $(this);
+
+			// dimensions is optional; defaults to selected element.
+			if (dimensions == null) {
+				dimensions = p;
+			}
+
+			attach_load_handlers(e, dimensions, should_not_hide);
 		});
 
 		return this;
@@ -109,17 +161,9 @@
 			}
 
 			var i = $(new Image())
-			.bind('load', {dimensions: dimensions}, onImageLoad)
 			.appendTo(e);
 
-			// by default, hide image before it is loaded.
-			if (!should_not_hide) {
-				i
-				.hide()
-				.bind('image_loaded_scaled', function(event) {
-					$(this).show().unbind(event);
-				});
-			}
+			attach_load_handlers(i, dimensions, should_not_hide);
 
 			i.attr(attr);
 			ret.push(i);
