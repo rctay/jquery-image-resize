@@ -53,6 +53,9 @@
 	 * Resizes the selected element with the ``'width'`` and ``'height'``
 	 * attributes with the specified dimensions.
 	 *
+	 * Alone, this method is unlikely to be useful, but may come in handy if
+	 * you're writing your own event handlers.
+	 *
 	 * :param dimensions: An object containing ``'width'`` and ``'height'``
 	 *   properties; if they're functions, they will be invoked with no
 	 *   arguments, and their return values, used.
