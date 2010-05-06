@@ -27,7 +27,7 @@
 	var onImageLoad = function(event) {
 		$(this)
 		.trigger('image_loaded')
-		.scale_image_to(event.data.dimensions)
+		.resize_image(event.data.dimensions)
 		.trigger('image_loaded_scaled')
 		.unbind(event);
 	};
@@ -57,7 +57,7 @@
 	 *
 	 * :returns: The selected element(s).
 	 */
-	$.fn.scale_image_to = function(dimensions) {
+	$.fn.resize_image = function(dimensions) {
 		// get dimensions
 		var w = dimensions.width instanceof Function ? dimensions.width() : dimensions.width;
 		var h = dimensions.height instanceof Function ? dimensions.height() : dimensions.height;
@@ -88,7 +88,7 @@
 	};
 
 	/**
-	 * Resizes an image with .scale_image_to() on completion of loading.
+	 * Resizes an image with .resize_image() on completion of loading.
 	 *
 	 * The following events are triggered on the image upon completion of
 	 * loading:
@@ -100,14 +100,14 @@
 	 * the image will be bound to the ``'image_loaded_scaled'`` event.
 	 *
 	 * :param dimensions: Optional; defaults to the selected element. See
-	 *   the *dimensions* argument to .scale_image_to().
+	 *   the *dimensions* argument to .resize_image().
 	 *
 	 * :param should_not_hide: Optional; if true, the image will be hidden
 	 *   before loading, and shown on loading completion.
 	 *
 	 * :returns: The selected element(s).
 	 */
-	$.fn.scale_image_on_load = function(dimensions, should_not_hide) {
+	$.fn.resize_image_on_load = function(dimensions, should_not_hide) {
 		var p = this.parent();
 
 		this.each(function() {
@@ -126,7 +126,7 @@
 
 	/**
 	 * Loads an image into the selected element, resizing it with
-	 * .scale_image_to() on completion.
+	 * .resize_image() on completion.
 	 *
 	 * The following events are triggered on the image upon completion of
 	 * loading:
@@ -141,7 +141,7 @@
 	 *   must contain a ``'src'`` entry, or the image will fail to load.
 	 *
 	 * :param dimensions: Optional; defaults to the selected element. See
-	 *   the *dimensions* argument to .scale_image_to().
+	 *   the *dimensions* argument to .resize_image().
 	 *
 	 * :param should_not_hide: Optional; if true, the image will be hidden
 	 *   before loading, and shown on loading completion.
@@ -149,7 +149,7 @@
 	 * :returns: A jQuery instance of the Image(s) created (NOT the selected
 	 *   element).
 	 */
-	$.fn.load_image = function(attr, dimensions, should_not_hide) {
+	$.fn.load_and_resize_image = function(attr, dimensions, should_not_hide) {
 		var ret = [];
 
 		this.each(function() {
