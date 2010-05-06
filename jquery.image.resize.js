@@ -46,23 +46,27 @@
 		var w = dimensions.width instanceof Function ? dimensions.width() : dimensions.width;
 		var h = dimensions.height instanceof Function ? dimensions.height() : dimensions.height;
 
-		// is fat?
-		if (this.attr("width") > this.attr("height")) {
-			scale_by_width(w, this);
+		this.each(function() {
+			var e = $(this);
 
-			if (this.attr("height") > h) {
-				scale_by_height(h, this);
+			// is fat?
+			if (e.attr("width") > e.attr("height")) {
+				scale_by_width(w, e);
+
+				if (e.attr("height") > h) {
+					scale_by_height(h, e);
+				} else {
+					valign_middle(h, e);
+				}
 			} else {
-				valign_middle(h, this);
-			}
-		} else {
-			scale_by_height(h, this);
+				scale_by_height(h, e);
 
-			if (this.attr("width") > w) {
-				scale_by_width(w, this);
-				valign_middle(h, this);
+				if (e.attr("width") > w) {
+					scale_by_width(w, e);
+					valign_middle(h, e);
+				}
 			}
-		}
+		});
 
 		return this;
 	};
@@ -89,29 +93,37 @@
 	 * :param should_not_hide: Optional; if true, the image will be hidden
 	 *   before loading, and shown on loading completion.
 	 *
-	 * :returns: The instance of Image created (NOT the selected element).
+	 * :returns: A jQuery instance of the Image(s) created (NOT the selected
+	 *   element).
 	 */
 	$.fn.load_image = function(attr, dimensions, should_not_hide) {
-		// dimensions is optional; defaults to selected element.
-		if (dimensions == null) {
-			dimensions = this;
-		}
+		var ret = [];
 
-		var i = $(new Image())
-		.bind('load', {dimensions: dimensions}, onImageLoad)
-		.appendTo(this);
+		this.each(function() {
+			var e = $(this);
 
-		// by default, hide image before it is loaded.
-		if (!should_not_hide) {
-			i
-			.hide()
-			.bind('image_loaded_scaled', function() {
-				$(this).show();
-			});
-		}
+			// dimensions is optional; defaults to selected element.
+			if (dimensions == null) {
+				dimensions = e;
+			}
 
-		i.attr(attr);
+			var i = $(new Image())
+			.bind('load', {dimensions: dimensions}, onImageLoad)
+			.appendTo(e);
 
-		return i;
+			// by default, hide image before it is loaded.
+			if (!should_not_hide) {
+				i
+				.hide()
+				.bind('image_loaded_scaled', function() {
+					$(this).show();
+				});
+			}
+
+			i.attr(attr);
+			ret.push(i);
+		});
+
+		return $(ret);
 	};
 })(jQuery);
