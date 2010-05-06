@@ -32,6 +32,21 @@
 		.unbind(event);
 	};
 
+	var attach_load_handlers = function(e, dimensions, should_not_hide) {
+		e.bind('load', {dimensions: dimensions}, onImageLoad);
+
+
+		// by default, hide image before it is loaded.
+		if (!should_not_hide) {
+			e
+			.hide()
+			.bind('image_loaded_scaled', function(event) {
+				$(this).show().unbind(event);
+			});
+		}
+
+	};
+
 	/**
 	 * Resizes the selected element with the ``'width'`` and ``'height'``
 	 * attributes with the specified dimensions.
@@ -109,17 +124,9 @@
 			}
 
 			var i = $(new Image())
-			.bind('load', {dimensions: dimensions}, onImageLoad)
 			.appendTo(e);
 
-			// by default, hide image before it is loaded.
-			if (!should_not_hide) {
-				i
-				.hide()
-				.bind('image_loaded_scaled', function(event) {
-					$(this).show().unbind(event);
-				});
-			}
+			attach_load_handlers(i, dimensions, should_not_hide);
 
 			i.attr(attr);
 			ret.push(i);
