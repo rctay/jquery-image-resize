@@ -113,17 +113,14 @@
 	 * :returns: The selected element(s).
 	 */
 	$.fn.resize_image_on_load = function(dimensions, should_not_hide) {
-		var p = this.parent();
-
 		this.each(function() {
 			var e = $(this);
 
-			// dimensions is optional; defaults to selected element.
-			if (dimensions == null) {
-				dimensions = p;
-			}
-
-			attach_load_handlers(e, dimensions, should_not_hide);
+			attach_load_handlers(e,
+				// dimensions is optional; defaults to element's
+				// parent.
+				dimensions ? dimensions : e.parent(),
+				should_not_hide);
 		});
 
 		return this;
